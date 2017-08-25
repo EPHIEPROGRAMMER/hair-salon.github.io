@@ -95,6 +95,28 @@ public class App {
     return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    // routing and a basic template setup
+  get("/stylists/:id", (request, response) -> {
+    Map<String, Object> model = new HashMap<String, Object>();
+    Stylist stylist = Stylist.find(Integer.parseInt(request.params(":id")));
+    model.put("stylist", stylist);
+    model.put("template", "templates/stylist.vtl");
+    return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    // showing accomplishment
+  post("/clients", (request,response) -> {
+    Map<String, Object> model = new HashMap<String, Object>();
+    String description = request.queryParams("description");
+    Stylist stylist = Stylist.find(Integer.parseInt(request.queryParams("stylistId")));
+    Client newClient = new Client(description, stylist.getId());
+    newClient.save();
+    model.put("stylist", stylist);
+    model.put("template", "templates/success.vtl");
+    return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+
 
   }
 }
