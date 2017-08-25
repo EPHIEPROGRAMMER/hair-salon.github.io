@@ -116,6 +116,29 @@ public class App {
     return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    // indicating stylist has already  done the work
+  post("/stylists", (request, response) -> {
+    Map<String, Object> model = new HashMap<String, Object>();
+    String description = request.queryParams("description");
+    String image = request.queryParams("image");
+    Stylist newStylist = new Stylist(description, image);
+    newStylist.save();
+    model.put("template", "templates/stylist-success.vtl");
+    return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+// a route to process new-client form submission
+  post("/clients", (request, response) -> {
+    Map<String, Object> model = new HashMap<String, Object>();
+    Stylist stylist = Stylist.find(Integer.parseInt(request.queryParams("stylistId")));
+    String description = request.queryParams("description");
+    Client newClient = new Client(description, stylist.getId());
+    newClient.save();
+    model.put("stylist", stylist);
+    model.put("template", "templates/stylist-client-success.vtl");
+    return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
 
 
   }
