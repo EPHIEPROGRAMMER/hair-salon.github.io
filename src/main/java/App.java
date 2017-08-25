@@ -44,6 +44,14 @@ public class App {
     return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    // route responsible for rendering the template with the new-client form
+  get("/clients/new", (request, response) -> {
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("stylists", Stylist.all());
+    model.put("template", "templates/client-form.vtl");
+    return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
 
   }
 }
